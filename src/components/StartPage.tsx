@@ -1,4 +1,4 @@
-import { contentType, ContentProps } from '@optimizely/cms-sdk';
+import { contentType, ContentProps, OptiFormsContainerDataContentType } from '@optimizely/cms-sdk';
 import { getPreviewUtils, OptimizelyComponent } from '@optimizely/cms-sdk/react/server';
 import { HeroContentType, HeroView } from './Hero';
 import { TextBlockContentType } from './TextBlock';
@@ -18,7 +18,12 @@ export const StartPageContentType = contentType({
       displayName: 'Main content area',
       items: {
         type: 'content',
-        allowedTypes: [HeroContentType, TextBlockContentType, CallToActionContentType],
+        allowedTypes: [
+          HeroContentType,
+          TextBlockContentType,
+          CallToActionContentType,
+          OptiFormsContainerDataContentType, // Optimizely Forms
+        ],
       },
     },
   },

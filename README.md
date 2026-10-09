@@ -114,6 +114,24 @@ npm run webhook:list     # check it exists
 
 Graph then calls `POST /api/revalidate/<REVALIDATE_SECRET>` after each publish. The handler looks up the page's URL and purges it. Deletes, bulk syncs and unknown events purge the whole site. A wrong secret returns 404.
 
+## Forms (Optimizely Forms)
+
+Editors build forms in the CMS; the site renders them with `src/components/forms/*` (registered via `initForms` in `src/lib/optimizely.ts`).
+
+**Where submissions go:** Optimizely does not store submissions for headless sites. Every form posts to `/api/forms/submit`, which
+1. logs it (Vercel → Logs, search `FORM SUBMISSION`), and
+2. forwards it as JSON to `FORMS_WEBHOOK_URL` if that env var is set (Power Automate, Zapier, Make, a CRM, or webhook.site for testing).
+
+The form's **Submit URL** field in the CMS is ignored on purpose.
+
+**One-time setup**
+1. CMS → **Settings → Forms Settings → Activate**.
+2. `npm run cms:push` (adds the Form Container to the start page's content area).
+
+**Create a form:** Create → Block → **Form Container** → add a **Form Step** → row → column → elements (Textbox, Textarea, Selection, Choice, Number, URL, Range, Submit). Publish the block, then drop it into the start page's *Main content area* or into a Visual Builder experience as a section.
+
+Gotchas: an *Email* validator accepts empty input — tick *Required* too. Buttons labelled `Next`, `Previous` or `Back` navigate steps; any other label submits.
+
 ## Local development
 
 ```bash
@@ -131,6 +149,8 @@ src/lib/content.ts             path mapping + cached getContentByPath
 src/app/[[...slug]]/page.tsx   published pages (ISR) + <head> metadata from the Seo contract
 src/app/preview/page.tsx       live preview / on-page editing
 src/app/api/revalidate/[secret]/route.ts   Graph webhook → revalidatePath
+src/app/api/forms/submit/route.ts          form submissions → log + FORMS_WEBHOOK_URL
+src/components/forms/*.tsx                 Optimizely Forms renderers
 src/components/*.tsx           content types and their React renderers
 scripts/create-webhook.mjs     registers / lists the Graph webhook
 ```
