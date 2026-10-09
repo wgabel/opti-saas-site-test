@@ -87,7 +87,8 @@ Re-run `npm run cms:push` whenever you change a content type in code.
 In the CMS → **Settings → Applications → (your app)**:
 
 1. **Hostnames → Add Hostname**
-   - `<project>.vercel.app` (or your custom domain), **Use a secure connection (HTTPS)** checked, Locale: all.
+   - `<project>.vercel.app` (or your custom domain, no `https://`), **Use a secure connection (HTTPS)** checked, Locale: all.
+   - If a **Type** option is shown, choose **Primary**. The preview URL's `{host}` token is filled from the primary hostname; without one, preview stays empty.
    - Optional for local dev: `localhost:3000` with HTTPS checked (see *Local development*).
 2. **Live Preview** tab
    - Select **Use Preview Tokens**.

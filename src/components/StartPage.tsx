@@ -43,9 +43,16 @@ export default function StartPage({ content }: Props) {
         </div>
       )}
       <div className="container stack" {...pa('mainContent')}>
-        {content.mainContent?.map((item, i) => (
-          <OptimizelyComponent key={i} content={item} />
-        ))}
+        {content.mainContent?.map((item, i) => {
+          // Each block gets data-epi-block-id (edit mode only) so the CMS can
+          // scope the block's own field overlays and make it selectable.
+          const key = (item as { _metadata?: { key?: string | null } })._metadata?.key;
+          return (
+            <div key={key ?? i} {...(key ? pa({ key }) : {})}>
+              <OptimizelyComponent content={item} />
+            </div>
+          );
+        })}
       </div>
     </main>
   );
